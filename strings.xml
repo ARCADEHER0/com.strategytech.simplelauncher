@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Simple Launcher</string>
+    <string name="brand_title">Strategy Tech Simple</string>
+
+    <!-- Home screen -->
+    <string name="cd_settings">Settings. Press and hold to open.</string>
+    <string name="hold_for_settings">Press and hold the gear to open settings</string>
+    <string name="cannot_open">Sorry, that app is not available on this phone.</string>
+    <string name="setup_banner_text">To see this screen every time you press Home, make it your home screen.</string>
+
+    <string name="tile_phone_icon">📞</string>
+    <string name="tile_phone">Phone Call</string>
+    <string name="tile_phone_sub">Talk to Family &amp; Friends</string>
+
+    <string name="tile_messages_icon">💬</string>
+    <string name="tile_messages">Messages</string>
+    <string name="tile_messages_sub">Read &amp; Send Texts</string>
+
+    <string name="tile_photos_icon">🖼️</string>
+    <string name="tile_photos">Grandkids Photos</string>
+    <string name="tile_photos_sub">View Family Memories</string>
+
+    <string name="tile_help_icon">🚨</string>
+    <string name="tile_help">Emergency Help</string>
+    <string name="tile_help_sub">Tap for Assistance</string>
+
+    <!-- My Apps tray -->
+    <string name="my_apps">My Apps</string>
+    <string name="add_app">+ Add App</string>
+    <string name="tray_empty">Tap “+ Add App” to put your favorite apps here.</string>
+    <string name="remove_fmt">Remove %1$s from My Apps?</string>
+    <string name="remove_yes">Yes, remove it</string>
+    <string name="remove_no">No, keep it</string>
+
+    <!-- Emergency dialog -->
+    <string name="emergency_title">Do you need help?</string>
+    <string name="call_emergency_fmt">Call %1$s (Emergency)</string>
+    <string name="call_contact_fmt">Call %1$s</string>
+    <string name="my_contact">my contact</string>
+    <string name="no_contact_hint">A family member can add an emergency contact in Settings.</string>
+    <string name="cancel_emergency">No, I\'m OK</string>
+    <string name="emergency_note">This opens your phone\'s dialer. Press the green call button to place the call. This app is not a monitored emergency alert service.</string>
+
+    <!-- App picker -->
+    <string name="picker_title">Choose an app to add</string>
+    <string name="search_hint">Search apps</string>
+    <string name="picker_empty">No apps found</string>
+    <string name="picker_loading">Loading apps…</string>
+    <string name="added_fmt">%1$s added</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings (for family or caregiver)</string>
+    <string name="section_home">Home screen</string>
+    <string name="home_status_yes">✓ This is your home screen.</string>
+    <string name="home_status_no">This is not your home screen yet.</string>
+    <string name="make_home">Make this my home screen</string>
+    <string name="change_home">Change home app</string>
+    <string name="section_emergency">Emergency</string>
+    <string name="emergency_number_label">Local emergency number</string>
+    <string name="emergency_number_help">Usually 911 in the US and Canada, 112 in Europe, 999 in the UK, 000 in Australia.</string>
+    <string name="contact_name_label">Emergency contact name</string>
+    <string name="contact_name_hint">For example: Mary (daughter)</string>
+    <string name="contact_number_label">Emergency contact phone number</string>
+    <string name="section_text">Text size</string>
+    <string name="size_normal">Normal</string>
+    <string name="size_large">Large</string>
+    <string name="size_xlarge">Extra large</string>
+    <string name="section_more">More</string>
+    <string name="phone_settings">Open phone settings</string>
+    <string name="about_text">Tip: press and hold an app in “My Apps” to remove it.\n\nThe Emergency button opens your phone\'s dialer with the number filled in. This app is not a monitored emergency alert service.</string>
+    <string name="done">Done</string>
+</resources>

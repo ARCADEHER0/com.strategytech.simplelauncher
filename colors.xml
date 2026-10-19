@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg">#0B1329</color>
+    <color name="panel">#152238</color>
+    <color name="accent_blue">#005A9E</color>
+    <color name="accent_hover">#0078D4</color>
+    <color name="header_start">#003366</color>
+    <color name="header_stroke">#4A90E2</color>
+    <color name="text_main">#FFFFFF</color>
+    <color name="text_dim">#C8CED8</color>
+    <color name="clock_yellow">#FFEB3B</color>
+    <color name="btn_green">#107C41</color>
+    <color name="btn_red">#D13438</color>
+    <color name="btn_grey">#4A5568</color>
+    <color name="border">#3B4D6B</color>
+    <color name="emergency_bg">#5C1D24</color>
+    <color name="chip_bg">#203554</color>
+    <color name="chip_border">#5070A0</color>
+    <color name="input_bg">#0B1329</color>
+    <color name="icon_bg">#005A9E</color>
+    <color name="ripple">#44FFFFFF</color>
+</resources>

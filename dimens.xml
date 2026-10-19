@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="tile_columns">2</integer>
+    <dimen name="tile_margin">6dp</dimen>
+    <dimen name="tile_grid_min_height">400dp</dimen>
+    <dimen name="tile_icon_size">52sp</dimen>
+    <dimen name="clock_size">48sp</dimen>
+</resources>

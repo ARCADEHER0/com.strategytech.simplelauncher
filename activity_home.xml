@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:fillViewport="true"
+    android:padding="12dp"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Shown only while this app is not yet the phone's Home app -->
+        <LinearLayout
+            android:id="@+id/setupBanner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_panel"
+            android:orientation="vertical"
+            android:padding="14dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/setup_banner_text"
+                android:textColor="@color/text_main"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/setupButton"
+                style="@style/BigButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_green"
+                android:text="@string/make_home" />
+        </LinearLayout>
+
+        <!-- Header with brand, settings gear, big clock and date -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_header"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="14dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/brandTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/brand_title"
+                    android:textColor="@color/text_main"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/settingsButton"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/bg_chip"
+                    android:contentDescription="@string/cd_settings"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:text="⚙"
+                    android:textColor="@color/text_main"
+                    android:textSize="28sp" />
+            </LinearLayout>
+
+            <TextClock
+                android:id="@+id/clock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:format12Hr="h:mm a"
+                android:format24Hr="HH:mm"
+                android:gravity="center"
+                android:paddingEnd="8dp"
+                android:textColor="@color/clock_yellow"
+                android:textSize="@dimen/clock_size"
+                android:textStyle="bold" />
+
+            <TextClock
+                android:id="@+id/dateText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:format12Hr="EEEE, MMMM d"
+                android:format24Hr="EEEE, MMMM d"
+                android:gravity="center"
+                android:paddingEnd="8dp"
+                android:textColor="@color/text_main"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <!-- The four big buttons are added here in code (2 columns upright, 4 when sideways) -->
+        <LinearLayout
+            android:id="@+id/tileGrid"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_weight="1"
+            android:minHeight="@dimen/tile_grid_min_height"
+            android:orientation="vertical" />
+
+        <!-- My Apps tray -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_panel"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/my_apps"
+                    android:textColor="@color/text_dim"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/addAppButton"
+                    style="@style/BigButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_button_green"
+                    android:minHeight="56dp"
+                    android:text="@string/add_app" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:minHeight="48dp">
+
+                <TextView
+                    android:id="@+id/emptyHint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/tray_empty"
+                    android:textColor="@color/text_dim"
+                    android:textSize="16sp" />
+
+                <HorizontalScrollView
+                    android:id="@+id/trayScroll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:id="@+id/appTray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal" />
+                </HorizontalScrollView>
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

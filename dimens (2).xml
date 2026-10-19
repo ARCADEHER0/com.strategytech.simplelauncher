@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Landscape: all four big buttons in a single row -->
+    <integer name="tile_columns">4</integer>
+    <dimen name="tile_grid_min_height">190dp</dimen>
+    <dimen name="tile_icon_size">40sp</dimen>
+    <dimen name="clock_size">36sp</dimen>
+</resources>

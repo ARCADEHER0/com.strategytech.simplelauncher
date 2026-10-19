@@ -1,0 +1,33 @@
+# Builds an installable test APK in the cloud, so you don't need Android Studio just to see the app.
+# Use: push this folder to a GitHub repo -> Actions tab -> "Build test APK" -> open the latest run
+# -> download the "SimpleLauncher-debug-apk" file at the bottom -> copy it to a phone and open it.
+name: Build test APK
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build debug APK
+        run: |
+          chmod +x ./gradlew
+          ./gradlew assembleDebug --stacktrace
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SimpleLauncher-debug-apk
+          path: app/build/outputs/apk/debug/*.apk

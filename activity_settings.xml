@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:fillViewport="true"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_title"
+            android:textColor="@color/text_main"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <!-- Home screen -->
+        <TextView
+            style="@style/SettingsHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/section_home" />
+
+        <TextView
+            android:id="@+id/homeStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_main"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/homeButton"
+            style="@style/BigButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_button_green" />
+
+        <!-- Emergency -->
+        <TextView
+            style="@style/SettingsHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/section_emergency" />
+
+        <TextView
+            style="@style/SettingsLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/emergencyNumberInput"
+            android:text="@string/emergency_number_label" />
+
+        <EditText
+            android:id="@+id/emergencyNumberInput"
+            style="@style/SettingsInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:importantForAutofill="no"
+            android:inputType="phone" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/emergency_number_help"
+            android:textColor="@color/text_dim"
+            android:textSize="14sp" />
+
+        <TextView
+            style="@style/SettingsLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/contactNameInput"
+            android:text="@string/contact_name_label" />
+
+        <EditText
+            android:id="@+id/contactNameInput"
+            style="@style/SettingsInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/contact_name_hint"
+            android:importantForAutofill="no"
+            android:inputType="textPersonName" />
+
+        <TextView
+            style="@style/SettingsLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/contactNumberInput"
+            android:text="@string/contact_number_label" />
+
+        <EditText
+            android:id="@+id/contactNumberInput"
+            style="@style/SettingsInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:importantForAutofill="no"
+            android:inputType="phone" />
+
+        <!-- Text size -->
+        <TextView
+            style="@style/SettingsHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/section_text" />
+
+        <RadioGroup
+            android:id="@+id/textSizeGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/sizeNormal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:text="@string/size_normal"
+                android:textColor="@color/text_main"
+                android:textSize="20sp" />
+
+            <RadioButton
+                android:id="@+id/sizeLarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:text="@string/size_large"
+                android:textColor="@color/text_main"
+                android:textSize="20sp" />
+
+            <RadioButton
+                android:id="@+id/sizeXLarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:text="@string/size_xlarge"
+                android:textColor="@color/text_main"
+                android:textSize="20sp" />
+        </RadioGroup>
+
+        <!-- More -->
+        <TextView
+            style="@style/SettingsHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/section_more" />
+
+        <Button
+            android:id="@+id/phoneSettingsButton"
+            style="@style/BigButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_button_blue"
+            android:text="@string/phone_settings" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/about_text"
+            android:textColor="@color/text_dim"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/doneButton"
+            style="@style/BigButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/bg_button_green"
+            android:text="@string/done" />
+    </LinearLayout>
+</ScrollView>
