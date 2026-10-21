@@ -1,0 +1,53 @@
+name: Build test APK
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.14.3
+
+      - name: Put the uploaded files back into their folders
+        run: |
+          set -e
+          P=proj
+          K=$P/app/src/main/java/com/strategytech/simplelauncher
+          R=$P/app/src/main/res
+          mkdir -p "$K" "$R/layout" "$R/drawable" "$R/mipmap-anydpi-v26" "$R/values" "$R/values-land"
+          cp *.kt "$K/"
+          cp AndroidManifest.xml "$P/app/src/main/"
+          for f in activity_app_picker activity_home activity_settings dialog_confirm dialog_emergency item_app item_app_chip view_tile; do cp "$f.xml" "$R/layout/"; done
+          cp bg_*.xml ic_launcher_foreground.xml ic_launcher_monochrome.xml "$R/drawable/"
+          cp ic_launcher.xml ic_launcher_round.xml "$R/mipmap-anydpi-v26/"
+          cp colors.xml strings.xml themes.xml "$R/values/"
+          for f in dimens*.xml; do
+            if grep -q Landscape "$f"; then cp "$f" "$R/values-land/dimens.xml"; else cp "$f" "$R/values/dimens.xml"; fi
+          done
+          for f in build.gradle*.kts; do
+            if grep -q 'apply false' "$f"; then cp "$f" "$P/build.gradle.kts"; else cp "$f" "$P/app/build.gradle.kts"; fi
+          done
+          cp settings.gradle.kts gradle.properties "$P/"
+          cp proguard-rules.pro "$P/app/"
+
+      - name: Build debug APK
+        working-directory: proj
+        run: gradle assembleDebug --stacktrace
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SimpleLauncher-debug-apk
+          path: proj/app/build/outputs/apk/debug/*.apk
