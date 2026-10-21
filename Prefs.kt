@@ -53,7 +53,7 @@ class Prefs(context: Context) {
         sp.edit().putString(KEY_FAVORITES, list.joinToString("\n")).apply()
     }
 
-    private fun defaultEmergencyNumber(): String =
+    fun defaultEmergencyNumber(): String =
         when (Locale.getDefault().country.uppercase(Locale.ROOT)) {
             "US", "CA" -> "911"
             "GB" -> "999"

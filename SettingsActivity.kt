@@ -21,7 +21,8 @@ class SettingsActivity : BaseActivity() {
     private lateinit var emergencyNumberInput: EditText
 
     private val homeRoleLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            HomeRole.onResult(this, result)
             updateHomeStatus()
         }
 
@@ -88,8 +89,10 @@ class SettingsActivity : BaseActivity() {
     private fun saveFields() {
         prefs.contactName = contactNameInput.text.toString()
         prefs.contactNumber = contactNumberInput.text.toString()
-        // A blank value falls back to the regional default (911, 112, ...).
-        prefs.emergencyNumber = emergencyNumberInput.text.toString().dialable()
+        // Store nothing while the field still shows the regional default (911, 112, ...),
+        // so it keeps following the phone's region. A blank value also means "use the default".
+        val typed = emergencyNumberInput.text.toString().dialable()
+        prefs.emergencyNumber = if (typed == prefs.defaultEmergencyNumber()) "" else typed
     }
 
     private fun updateHomeStatus() {

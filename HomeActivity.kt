@@ -1,5 +1,6 @@
 package com.strategytech.simplelauncher
 
+import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Intent
@@ -31,6 +32,7 @@ class HomeActivity : BaseActivity() {
 
     private lateinit var prefs: Prefs
     private var textScaleAtCreate = 1.0f
+    private var currentDialog: AlertDialog? = null
 
     private lateinit var scroll: ScrollView
     private lateinit var tileGrid: LinearLayout
@@ -40,7 +42,8 @@ class HomeActivity : BaseActivity() {
     private lateinit var setupBanner: View
 
     private val homeRoleLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            HomeRole.onResult(this, result)
             updateSetupBanner()
         }
 
@@ -95,6 +98,12 @@ class HomeActivity : BaseActivity() {
         }
         updateTray()
         updateSetupBanner()
+    }
+
+    override fun onDestroy() {
+        currentDialog?.dismiss()
+        currentDialog = null
+        super.onDestroy()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -159,6 +168,9 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun launchOrToast(intent: Intent, fallback: Intent? = null) {
+        // Each app gets its own task, so pressing Home never destroys it or loses a half-typed text.
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        fallback?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         try {
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {
@@ -195,6 +207,7 @@ class HomeActivity : BaseActivity() {
         }
 
         val dialog = Dialogs.showCustom(this, view)
+        currentDialog = dialog
         callEmergency.setOnClickListener {
             dialog.dismiss()
             dial(emergencyNumber)
@@ -256,7 +269,7 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun confirmRemove(flat: String, label: String) {
-        Dialogs.confirm(
+        currentDialog = Dialogs.confirm(
             this,
             getString(R.string.remove_fmt, label),
             getString(R.string.remove_yes),

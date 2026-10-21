@@ -28,7 +28,7 @@ object Dialogs {
         yesLabel: String,
         noLabel: String,
         onYes: () -> Unit
-    ) {
+    ): AlertDialog {
         val view = activity.layoutInflater.inflate(R.layout.dialog_confirm, null)
         view.findViewById<TextView>(R.id.confirmTitle).text = title
         val yes = view.findViewById<Button>(R.id.confirmYes)
@@ -41,5 +41,6 @@ object Dialogs {
             onYes()
         }
         no.setOnClickListener { dialog.dismiss() }
+        return dialog
     }
 }
