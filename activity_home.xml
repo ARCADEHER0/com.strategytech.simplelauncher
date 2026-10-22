@@ -41,7 +41,7 @@
                 android:text="@string/make_home" />
         </LinearLayout>
 
-        <!-- Header with brand, settings gear, big clock and date -->
+        <!-- Header with local weather, settings gear, big clock and date -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,15 +58,32 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/brandTitle"
+                <LinearLayout
+                    android:id="@+id/weatherBlock"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/brand_title"
-                    android:textColor="@color/text_main"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:minHeight="56dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/weatherMain"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_main"
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/weatherDetail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_dim"
+                        android:textSize="16sp" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/settingsButton"
@@ -106,7 +123,7 @@
                 android:textSize="22sp" />
         </LinearLayout>
 
-        <!-- The four big buttons are added here in code (2 columns upright, 4 when sideways) -->
+        <!-- The three big buttons are added here in code (Phone on top, the other two below; one row when sideways) -->
         <LinearLayout
             android:id="@+id/tileGrid"
             android:layout_width="match_parent"
@@ -116,6 +133,56 @@
             android:layout_weight="1"
             android:minHeight="@dimen/tile_grid_min_height"
             android:orientation="vertical" />
+
+        <!-- Emergency: a slim bar, much smaller than the big buttons but still easy to hit -->
+        <LinearLayout
+            android:id="@+id/emergencyBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_tile_emergency"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:minHeight="64dp"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:text="@string/tile_help_icon"
+                android:textSize="30sp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tile_help"
+                    android:textColor="@color/text_main"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tile_help_sub"
+                    android:textColor="@color/text_dim"
+                    android:textSize="15sp" />
+            </LinearLayout>
+        </LinearLayout>
 
         <!-- My Apps tray -->
         <LinearLayout
