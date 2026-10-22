@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import java.util.Locale
 
-/** All settings live in private on-device storage. Nothing is ever sent anywhere. */
+/** All settings live in private on-device storage. They are never sent anywhere. */
 class Prefs(context: Context) {
 
     private val sp: SharedPreferences =
@@ -35,6 +35,16 @@ class Prefs(context: Context) {
             2 -> 1.4f
             else -> 1.0f
         }
+
+    /** True once the person has answered the "your phone will ask for permission" explanation. */
+    var introShown: Boolean
+        get() = sp.getBoolean(KEY_INTRO_SHOWN, false)
+        set(value) = sp.edit().putBoolean(KEY_INTRO_SHOWN, value).apply()
+
+    /** How many times the system permission prompt was launched (tells us when Android stops showing it). */
+    var permissionRequests: Int
+        get() = sp.getInt(KEY_PERMISSION_REQUESTS, 0)
+        set(value) = sp.edit().putInt(KEY_PERMISSION_REQUESTS, value).apply()
 
     /** Favorite apps, stored as flattened component names ("package/class"), in the order added. */
     fun favorites(): List<String> =
@@ -69,5 +79,7 @@ class Prefs(context: Context) {
         const val KEY_EMERGENCY_NUMBER = "emergency_number"
         const val KEY_TEXT_SIZE = "text_size"
         const val KEY_FAVORITES = "favorites"
+        const val KEY_INTRO_SHOWN = "intro_shown"
+        const val KEY_PERMISSION_REQUESTS = "permission_requests"
     }
 }
