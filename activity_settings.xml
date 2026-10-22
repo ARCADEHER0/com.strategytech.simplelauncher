@@ -144,6 +144,37 @@
                 android:textSize="20sp" />
         </RadioGroup>
 
+        <!-- Weather and notifications -->
+        <TextView
+            style="@style/SettingsHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/section_permissions" />
+
+        <TextView
+            android:id="@+id/permissionStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_main"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/permissionsButton"
+            style="@style/BigButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_button_blue"
+            android:text="@string/open_permissions" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/weather_credit"
+            android:textColor="@color/text_dim"
+            android:textSize="14sp" />
+
         <!-- More -->
         <TextView
             style="@style/SettingsHeading"
