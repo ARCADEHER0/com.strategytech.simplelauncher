@@ -22,11 +22,17 @@ object Dialogs {
         return dialog
     }
 
+    /**
+     * A question with a big Yes button (red by default; pass a green background for friendly questions)
+     * and a big No button. [onNo] runs only when No is pressed, not when the dialog is dismissed otherwise.
+     */
     fun confirm(
         activity: Activity,
         title: String,
         yesLabel: String,
         noLabel: String,
+        yesBackground: Int = R.drawable.bg_button_red,
+        onNo: () -> Unit = {},
         onYes: () -> Unit
     ): AlertDialog {
         val view = activity.layoutInflater.inflate(R.layout.dialog_confirm, null)
@@ -35,12 +41,16 @@ object Dialogs {
         val no = view.findViewById<Button>(R.id.confirmNo)
         yes.text = yesLabel
         no.text = noLabel
+        yes.setBackgroundResource(yesBackground)
         val dialog = showCustom(activity, view)
         yes.setOnClickListener {
             dialog.dismiss()
             onYes()
         }
-        no.setOnClickListener { dialog.dismiss() }
+        no.setOnClickListener {
+            dialog.dismiss()
+            onNo()
+        }
         return dialog
     }
 }
