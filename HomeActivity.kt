@@ -1,13 +1,18 @@
 package com.strategytech.simplelauncher
 
+import android.Manifest
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
+import android.provider.Settings
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -18,15 +23,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 
-/** The home screen: clock, four big buttons, and the "My Apps" tray. */
+/** The home screen: weather, clock, three big buttons, a slim Emergency bar, and the "My Apps" tray. */
 class HomeActivity : BaseActivity() {
 
     private class Tile(
         val iconRes: Int,
         val labelRes: Int,
         val subRes: Int,
-        val emergency: Boolean,
         val action: () -> Unit
     )
 
@@ -40,11 +45,28 @@ class HomeActivity : BaseActivity() {
     private lateinit var trayScroll: View
     private lateinit var emptyHint: View
     private lateinit var setupBanner: View
+    private lateinit var weatherBlock: View
+    private lateinit var weatherMain: TextView
+    private lateinit var weatherDetail: TextView
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val weatherTick = object : Runnable {
+        override fun run() {
+            refreshWeather(force = false)
+            handler.postDelayed(this, WEATHER_CHECK_MS)
+        }
+    }
 
     private val homeRoleLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             HomeRole.onResult(this, result)
             updateSetupBanner()
+        }
+
+    private val permissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            refreshWeather(force = true)
+            updateWeatherUi()
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +82,9 @@ class HomeActivity : BaseActivity() {
         trayScroll = findViewById(R.id.trayScroll)
         emptyHint = findViewById(R.id.emptyHint)
         setupBanner = findViewById(R.id.setupBanner)
+        weatherBlock = findViewById(R.id.weatherBlock)
+        weatherMain = findViewById(R.id.weatherMain)
+        weatherDetail = findViewById(R.id.weatherDetail)
 
         // This is the bottom of the stack. Back (button or gesture) must simply do nothing.
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -87,7 +112,21 @@ class HomeActivity : BaseActivity() {
             }
         }
 
+        findViewById<View>(R.id.emergencyBar).apply {
+            contentDescription = getString(R.string.tile_help) + ". " + getString(R.string.tile_help_sub)
+            setOnClickListener { showEmergencyDialog() }
+        }
+
+        weatherBlock.setOnClickListener { onWeatherTapped() }
+
         buildTiles()
+
+        // First time only: explain, then let Android ask for location (weather) and notifications.
+        if (!prefs.introShown) {
+            scroll.post {
+                if (!isFinishing && !isDestroyed) showPermissionIntro()
+            }
+        }
     }
 
     override fun onResume() {
@@ -98,6 +137,14 @@ class HomeActivity : BaseActivity() {
         }
         updateTray()
         updateSetupBanner()
+        updateWeatherUi()
+        handler.removeCallbacks(weatherTick)
+        handler.post(weatherTick)
+    }
+
+    override fun onPause() {
+        handler.removeCallbacks(weatherTick)
+        super.onPause()
     }
 
     override fun onDestroy() {
@@ -116,15 +163,19 @@ class HomeActivity : BaseActivity() {
 
     private fun buildTiles() {
         val tiles = listOf(
-            Tile(R.string.tile_phone_icon, R.string.tile_phone, R.string.tile_phone_sub, false) { openDialer() },
-            Tile(R.string.tile_messages_icon, R.string.tile_messages, R.string.tile_messages_sub, false) { openMessages() },
-            Tile(R.string.tile_photos_icon, R.string.tile_photos, R.string.tile_photos_sub, false) { openPhotos() },
-            Tile(R.string.tile_help_icon, R.string.tile_help, R.string.tile_help_sub, true) { showEmergencyDialog() }
+            Tile(R.string.tile_phone_icon, R.string.tile_phone, R.string.tile_phone_sub) { openDialer() },
+            Tile(R.string.tile_messages_icon, R.string.tile_messages, R.string.tile_messages_sub) { openMessages() },
+            Tile(R.string.tile_photos_icon, R.string.tile_photos, R.string.tile_photos_sub) { openPhotos() }
         )
         val columns = resources.getInteger(R.integer.tile_columns)
 
+        // Upright: Phone Call gets the whole first row, Messages and Photos share the second.
+        // Sideways: all three in one row.
+        val rows: List<List<Tile>> =
+            if (columns <= 2) listOf(tiles.take(1), tiles.drop(1)) else tiles.chunked(columns)
+
         tileGrid.removeAllViews()
-        for (rowTiles in tiles.chunked(columns)) {
+        for (rowTiles in rows) {
             val row = LinearLayout(this).apply {
                 orientation = LinearLayout.HORIZONTAL
                 layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f)
@@ -143,7 +194,6 @@ class HomeActivity : BaseActivity() {
         view.findViewById<TextView>(R.id.tileIcon).setText(tile.iconRes)
         view.findViewById<TextView>(R.id.tileLabel).setText(tile.labelRes)
         view.findViewById<TextView>(R.id.tileSub).setText(tile.subRes)
-        if (tile.emergency) view.setBackgroundResource(R.drawable.bg_tile_emergency)
         view.contentDescription = getString(tile.labelRes) + ". " + getString(tile.subRes)
         view.setOnClickListener { tile.action() }
         return view
@@ -182,6 +232,95 @@ class HomeActivity : BaseActivity() {
                     // fall through to the message below
                 }
             }
+            Toast.makeText(this, R.string.cannot_open, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    // ---------------------------------------------------------------- weather
+
+    private fun refreshWeather(force: Boolean) {
+        if (!Weather.hasPermission(this)) return
+        if (!force && !Weather.needsRefresh(this)) return
+        Weather.refresh(this) {
+            if (!isFinishing && !isDestroyed) updateWeatherUi()
+        }
+    }
+
+    private fun updateWeatherUi() {
+        if (!Weather.hasPermission(this)) {
+            weatherMain.setText(R.string.weather_title)
+            weatherDetail.setText(R.string.weather_tap_to_enable)
+        } else {
+            val report = Weather.cached(this)
+            if (report == null) {
+                weatherMain.setText(R.string.weather_title)
+                weatherDetail.setText(
+                    when {
+                        !Weather.locationOn(this) -> R.string.weather_need_location
+                        Weather.isRefreshing() -> R.string.weather_loading
+                        else -> R.string.weather_unavailable
+                    }
+                )
+            } else {
+                val look = Weather.look(report)
+                val unit = if (report.fahrenheit) "F" else "C"
+                weatherMain.text = getString(R.string.weather_main_fmt, look.emoji, report.temp, unit)
+                weatherDetail.text = getString(
+                    R.string.weather_detail_fmt, getString(look.label), report.high, report.low
+                )
+            }
+        }
+        weatherBlock.contentDescription =
+            weatherMain.text.toString() + ". " + weatherDetail.text.toString().replace('\n', ' ')
+    }
+
+    private fun onWeatherTapped() {
+        if (Weather.hasPermission(this)) {
+            refreshWeather(force = true)
+            updateWeatherUi()
+            return
+        }
+        // After Android has refused to ask again, the only way to turn it on is the app's settings page.
+        val blocked = prefs.permissionRequests > 0 &&
+            !shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)
+        if (blocked) openAppSettings() else requestPermissions()
+    }
+
+    private fun showPermissionIntro() {
+        currentDialog = Dialogs.confirm(
+            this,
+            getString(R.string.permission_intro),
+            getString(R.string.permission_continue),
+            getString(R.string.permission_later),
+            yesBackground = R.drawable.bg_button_green,
+            onNo = { prefs.introShown = true }
+        ) {
+            prefs.introShown = true
+            requestPermissions()
+        }
+    }
+
+    /** Asks Android for location (weather) and, on Android 13+, notifications. */
+    private fun requestPermissions() {
+        val wanted = mutableListOf<String>()
+        if (!Weather.hasPermission(this)) wanted.add(Manifest.permission.ACCESS_COARSE_LOCATION)
+        if (Build.VERSION.SDK_INT >= 33 &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            wanted.add(Manifest.permission.POST_NOTIFICATIONS)
+        }
+        if (wanted.isEmpty()) return
+        prefs.permissionRequests = prefs.permissionRequests + 1
+        permissionLauncher.launch(wanted.toTypedArray())
+    }
+
+    private fun openAppSettings() {
+        try {
+            startActivity(
+                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", packageName, null))
+            )
+        } catch (e: ActivityNotFoundException) {
             Toast.makeText(this, R.string.cannot_open, Toast.LENGTH_LONG).show()
         }
     }
@@ -284,5 +423,9 @@ class HomeActivity : BaseActivity() {
 
     private fun updateSetupBanner() {
         setupBanner.visibility = if (HomeRole.isDefaultHome(this)) View.GONE else View.VISIBLE
+    }
+
+    private companion object {
+        const val WEATHER_CHECK_MS = 10L * 60 * 1000
     }
 }
