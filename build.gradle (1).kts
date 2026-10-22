@@ -1,3 +1,4 @@
+import java.util.Properties
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -8,7 +9,7 @@ plugins {
 // Optional release signing. Create keystore.properties in the project root (see README.md).
 // If the file is missing, the release build is simply left unsigned (fine when using Play App Signing
 // and signing the bundle from Android Studio's "Generate Signed Bundle" wizard instead).
-val keystoreProps = java.util.Properties().apply {
+val keystoreProps = Properties().apply {
     val file = rootProject.file("keystore.properties")
     if (file.exists()) file.inputStream().use { load(it) }
 }
