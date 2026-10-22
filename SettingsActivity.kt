@@ -2,6 +2,7 @@ package com.strategytech.simplelauncher
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
@@ -11,6 +12,7 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.NotificationManagerCompat
 
 /** Caregiver settings. Reached by pressing and holding the gear on the home screen. */
 class SettingsActivity : BaseActivity() {
@@ -66,6 +68,15 @@ class SettingsActivity : BaseActivity() {
         findViewById<Button>(R.id.homeButton).setOnClickListener {
             HomeRole.request(this, homeRoleLauncher)
         }
+        findViewById<Button>(R.id.permissionsButton).setOnClickListener {
+            try {
+                startActivity(
+                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", packageName, null))
+                )
+            } catch (e: ActivityNotFoundException) {
+                Toast.makeText(this, R.string.cannot_open, Toast.LENGTH_LONG).show()
+            }
+        }
         findViewById<Button>(R.id.phoneSettingsButton).setOnClickListener {
             try {
                 startActivity(Intent(Settings.ACTION_SETTINGS))
@@ -79,6 +90,7 @@ class SettingsActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         updateHomeStatus()
+        updatePermissionStatus()
     }
 
     override fun onPause() {
@@ -93,6 +105,16 @@ class SettingsActivity : BaseActivity() {
         // so it keeps following the phone's region. A blank value also means "use the default".
         val typed = emergencyNumberInput.text.toString().dialable()
         prefs.emergencyNumber = if (typed == prefs.defaultEmergencyNumber()) "" else typed
+    }
+
+    private fun updatePermissionStatus() {
+        val weather = if (Weather.hasPermission(this)) R.string.perm_weather_on else R.string.perm_weather_off
+        val alerts = if (NotificationManagerCompat.from(this).areNotificationsEnabled()) {
+            R.string.perm_notif_on
+        } else {
+            R.string.perm_notif_off
+        }
+        findViewById<TextView>(R.id.permissionStatus).text = getString(weather) + "\n" + getString(alerts)
     }
 
     private fun updateHomeStatus() {
