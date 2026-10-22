@@ -47,6 +47,11 @@ jobs:
           cp settings.gradle.kts gradle.properties "$P/"
           cp proguard-rules.pro "$P/app/"
 
+      - name: Use the same test signing key every build (so new APKs install over old ones)
+        run: |
+          mkdir -p ~/.android
+          base64 -d debug.keystore.b64 > ~/.android/debug.keystore
+
       - name: Build debug APK
         working-directory: proj
         run: gradle assembleDebug --stacktrace
