@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Simple Launcher</string>
-    <string name="brand_title">Strategy Tech Simple</string>
 
     <!-- Home screen -->
     <string name="cd_settings">Settings. Press and hold to open.</string>
@@ -24,6 +23,34 @@
     <string name="tile_help_icon">🚨</string>
     <string name="tile_help">Emergency Help</string>
     <string name="tile_help_sub">Tap for Assistance</string>
+
+    <!-- Weather -->
+    <string name="weather_title">Weather</string>
+    <string name="weather_tap_to_enable">Tap here to turn on</string>
+    <string name="weather_loading">Checking…</string>
+    <string name="weather_unavailable">Not available right now</string>
+    <string name="weather_need_location">Turn on Location in your phone\'s settings</string>
+    <string name="weather_main_fmt">%1$s %2$d°%3$s</string>
+    <string name="weather_detail_fmt">%1$s\nHigh %2$d° · Low %3$d°</string>
+    <string name="weather_sunny">Sunny</string>
+    <string name="weather_clear">Clear</string>
+    <string name="weather_mostly_sunny">Mostly sunny</string>
+    <string name="weather_mostly_clear">Mostly clear</string>
+    <string name="weather_partly_cloudy">Partly cloudy</string>
+    <string name="weather_cloudy">Cloudy</string>
+    <string name="weather_fog">Foggy</string>
+    <string name="weather_drizzle">Light rain</string>
+    <string name="weather_rain">Rain</string>
+    <string name="weather_freezing_rain">Freezing rain</string>
+    <string name="weather_snow">Snow</string>
+    <string name="weather_showers">Rain showers</string>
+    <string name="weather_snow_showers">Snow showers</string>
+    <string name="weather_thunderstorm">Thunderstorms</string>
+
+    <!-- First-run permission explanation -->
+    <string name="permission_intro">To show your local weather and send you notifications, your phone will ask for permission. Please tap “Allow” each time.</string>
+    <string name="permission_continue">OK, continue</string>
+    <string name="permission_later">Not now</string>
 
     <!-- My Apps tray -->
     <string name="my_apps">My Apps</string>
@@ -67,6 +94,13 @@
     <string name="size_normal">Normal</string>
     <string name="size_large">Large</string>
     <string name="size_xlarge">Extra large</string>
+    <string name="section_permissions">Weather and notifications</string>
+    <string name="perm_weather_on">✓ Weather is on.</string>
+    <string name="perm_weather_off">Weather is off. It needs the Location permission.</string>
+    <string name="perm_notif_on">✓ Notifications are on.</string>
+    <string name="perm_notif_off">Notifications are off.</string>
+    <string name="open_permissions">Open app permissions</string>
+    <string name="weather_credit">Weather data by Open-Meteo.com. Your approximate location (about 1 km) is sent to Open-Meteo only to look up the weather.</string>
     <string name="section_more">More</string>
     <string name="phone_settings">Open phone settings</string>
     <string name="about_text">Tip: press and hold an app in “My Apps” to remove it.\n\nThe Emergency button opens your phone\'s dialer with the number filled in. This app is not a monitored emergency alert service.</string>
